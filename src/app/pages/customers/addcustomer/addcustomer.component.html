@@ -1,0 +1,175 @@
+
+<div class="customer-container">
+  <mat-card class="customer-card">
+    <h2 class="title">Add Customer</h2>
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+      <mat-tab-group animationDuration="300ms">
+        <!-- TAB 1: Personal Information -->
+        <mat-tab label="Personal Information">
+          <div class="tab-content">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>First Name</mat-label>
+                <input matInput type="text" formControlName="firstname">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="customerForm.get('firstname')?.hasError('required')">
+                  First name is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput type="text" formControlName="lastname">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="customerForm.get('lastname')?.hasError('required')">
+                  Last name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-icon matSuffix>email</mat-icon>
+                <mat-error *ngIf="customerForm.get('email')?.hasError('required')">
+                  Email is required
+                </mat-error>
+                <mat-error *ngIf="customerForm.get('email')?.hasError('email')">
+                  Enter a valid email
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mobile Number</mat-label>
+                <input matInput type="tel" formControlName="mobileno" maxlength="10">
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-error *ngIf="customerForm.get('mobileno')?.hasError('required')">
+                  Mobile number is required
+                </mat-error>
+                <mat-error *ngIf="customerForm.get('mobileno')?.hasError('pattern')">
+                  Enter valid 10 digit mobile number
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="dob">
+                <mat-datepicker-toggle matIconSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender">
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 2: Demography Details -->
+        <mat-tab label="Demography Details">
+          <div class="tab-content">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Location</mat-label>
+                <mat-select formControlName="locationid">
+                  <mat-option *ngFor="let location of locations" [value]="location.id">
+                    {{ location.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>District</mat-label>
+                <mat-select formControlName="districtid">
+                  <mat-option *ngFor="let district of districts" [value]="district.id">
+                    {{ district.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>State</mat-label>
+                <mat-select formControlName="stateid">
+                  <mat-option *ngFor="let state of states" [value]="state.id">
+                    {{ state.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="countryid">
+                  <mat-option *ngFor="let country of countries" [value]="country.id">
+                    {{ country.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Pincode</mat-label>
+                <input matInput type="text" formControlName="pincode" maxlength="6">
+                <mat-icon matSuffix>location_on</mat-icon>
+                <mat-error *ngIf="customerForm.get('pincode')?.hasError('required')">
+                  Pincode is required
+                </mat-error>
+                <mat-error *ngIf="customerForm.get('pincode')?.hasError('pattern')">
+                  Enter valid 6 digit pincode
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 3: Loan Details -->
+        <mat-tab label="Loan Details">
+          <div class="tab-content">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Monthly Income</mat-label>
+                <input matInput type="number" formControlName="income">
+                <span matTextPrefix>₹&nbsp;</span>
+                <mat-error *ngIf="customerForm.get('income')?.hasError('required')">
+                  Income is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Loan Type</mat-label>
+                <mat-select formControlName="loantypeid">
+                  <mat-option *ngFor="let loanType of loanTypes" [value]="loanType.id">
+                    {{ loanType.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="customerForm.get('loantypeid')?.hasError('required')">
+                  Loan type is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="button-section">
+              <button mat-raised-button color="primary" type="submit" [disabled]="customerForm.invalid">
+                <mat-icon>save</mat-icon>
+                Save Customer
+              </button>
+              <button mat-stroked-button color="warn" type="button" (click)="resetForm()">
+                Reset
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </mat-card>
+</div>

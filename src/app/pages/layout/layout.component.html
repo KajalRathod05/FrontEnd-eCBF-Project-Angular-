@@ -1,0 +1,87 @@
+<mat-sidenav-container class="layout-container">
+
+    <!-- SIDENAV -->
+    <mat-sidenav
+      #drawer
+      class="sidenav"
+      [mode]="isMobile ? 'over' : 'side'"
+      [opened]="!isMobile">
+  
+      <div class="logo">My App</div>
+  
+      <mat-nav-list>
+        <a mat-list-item routerLink="/pages/dashboard" routerLinkActive="active">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        
+        <a mat-list-item routerLink="/pages/user" >
+          <mat-icon>person</mat-icon>
+          <span>Users</span>
+        </a>
+        <a mat-list-item routerLink="/pages/customer" >
+          <mat-icon>real_estate_agent</mat-icon>
+          <span>Customers</span>
+        </a>
+        <a mat-list-item routerLink="/pages/loan" >
+          <mat-icon>request_quote</mat-icon>
+          <span>Loan Booking</span>
+        </a>
+   
+        <a mat-list-item routerLink="/pages/profile">
+          <mat-icon>account_box</mat-icon>
+          <span>Profile</span>
+        </a>
+  
+        <a mat-list-item>
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </a>
+
+        <div class="logout">
+            <a mat-list-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </a>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+  
+      <mat-toolbar color="primary" class="header">
+        <button
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isMobile">
+          <mat-icon>menu</mat-icon>
+        </button>
+  
+        <span class="app-title">Admin Panel</span>
+  
+        <span class="spacer"></span>
+  
+        <span class="username">
+          <mat-icon id="user">account_circle</mat-icon>
+          {{ username || 'Guest' }}
+        </span>
+  
+        <button mat-icon-button (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </mat-toolbar>
+  
+      <!-- PAGE CONTENT -->
+      <div class="page-content">
+        <router-outlet></router-outlet>
+      </div>
+  
+      <!-- FOOTER -->
+      <footer class="footer">
+        © 2026 My App | All Rights Reserved
+      </footer>
+  
+    </mat-sidenav-content>
+  
+  </mat-sidenav-container>
+  
