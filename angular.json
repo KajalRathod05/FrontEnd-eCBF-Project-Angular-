@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-angular-project": {
+    "angular-eCBF": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/Angular-eCBF",
+            "outputPath": "dist/angular-eCBF",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Angular-eCBF:build:production"
+              "buildTarget": "angular-eCBF:build:production"
             },
             "development": {
-              "buildTarget": "Angular-eCBF:build:development"
+              "buildTarget": "angular-eCBF:build:development"
             }
           },
           "defaultConfiguration": "development"

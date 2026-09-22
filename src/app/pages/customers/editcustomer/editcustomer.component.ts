@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../../../auth/services/customer.service';
+import { CustomerService } from '../../../services/customer.service';
 
 @Component({
   selector: 'app-editcustomer',

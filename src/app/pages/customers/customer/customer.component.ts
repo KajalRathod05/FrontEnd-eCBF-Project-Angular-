@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit ,Output,ViewChild} from '@angula
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CustomerService } from '../../../auth/services/customer.service';
+import { CustomerService } from '../../../services/customer.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
