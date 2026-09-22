@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
 
-    console.log('Sending Authorization:', `Bearer ${token}`);
+    //console.log('Sending Authorization:', `Bearer ${token}`);
   }
 
   return next(authRequest).pipe(
