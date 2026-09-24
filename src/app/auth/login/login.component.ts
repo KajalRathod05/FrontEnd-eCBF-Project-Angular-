@@ -76,7 +76,7 @@ export class LoginComponent {
 
 loginUser() {
     this.isLoading = true;
-    const email = this.loginForm.value.email;
+    //const email = this.loginForm.value.email;
     const username = this.loginForm.value.username;
    
     const loginData = this.loginForm.value;
@@ -85,7 +85,7 @@ loginUser() {
     this.loginService.userLogin(loginData)
       .subscribe({
         next: (response) => {
-          console.log('Login response:', response);
+          console.log('Login response:', "ok");
           this.isLoading = false;
 
           this.toastr.success("Login Success!",'Success');

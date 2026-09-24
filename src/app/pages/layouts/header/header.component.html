@@ -1,0 +1,30 @@
+<mat-toolbar color="primary" class="header">
+  <!-- Mobile Toggle Button -->
+  <button mat-icon-button (click)="toggleDrawer.emit()" *ngIf="isMobile">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- Horizontal Top Modules List -->
+  <nav class="horizontal-nav" *ngIf="!isMobile">
+    <a 
+      *ngFor="let item of menuItems" 
+      class="top-nav-link" 
+      [class.active]="selectedModule === item"
+      (click)="selectModule(item)">
+      <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
+      <span>{{ item.title }}</span>
+    </a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <!-- User Info & Action Icons -->
+  <span class="username">
+    <mat-icon id="user">account_circle</mat-icon>
+    {{ username || 'Guest' }}
+  </span>
+
+  <button mat-icon-button (click)="logout.emit()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

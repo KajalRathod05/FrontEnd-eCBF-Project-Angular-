@@ -1,12 +1,16 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-   const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   const router = inject(Router);
+  const dialog = inject(MatDialog);
+  const toastr = inject(ToastrService);
 
   let authRequest = req;
 
@@ -36,9 +40,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('username');
         sessionStorage.removeItem('userid');
+        dialog.closeAll();
 
         // Redirect to login
         if (!router.url.startsWith('/login')) {
+          toastr.error('JWT expired or unauthorized.', 'Error');
           console.log('Redirecting to login page...');
           router.navigate(['/login']);
         }
@@ -48,3 +54,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
+function constructor() {
+  throw new Error('Function not implemented.');
+}
+

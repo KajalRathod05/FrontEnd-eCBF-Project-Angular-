@@ -1,0 +1,139 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Add Employee</h2>
+    <button mat-icon-button type="button" (click)="onCancel()" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="employeeForm">
+      <div class="section-title">Employee General Detail</div>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter name">
+          <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Employee Code</mat-label>
+          <input matInput formControlName="employeecode" placeholder="Enter employee code">
+          <mat-error *ngIf="employeeForm.get('employeecode')?.hasError('required')">Employee Code is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Branch</mat-label>
+          <mat-select formControlName="branch">
+            <mat-option value="Branch 1">Branch 1</mat-option>
+            <mat-option value="Branch 2">Branch 2</mat-option>
+          </mat-select>
+          <mat-error *ngIf="employeeForm.get('branch')?.hasError('required')">Branch is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Department</mat-label>
+          <mat-select formControlName="department">
+            <mat-option value="IT">IT</mat-option>
+            <mat-option value="HR">HR</mat-option>
+            <mat-option value="Finance">Finance</mat-option>
+          </mat-select>
+          <mat-error *ngIf="employeeForm.get('department')?.hasError('required')">Department is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option value="Admin">Admin</mat-option>
+            <mat-option value="User">User</mat-option>
+            <mat-option value="Manager">Manager</mat-option>
+          </mat-select>
+          <mat-error *ngIf="employeeForm.get('role')?.hasError('required')">Role is required</mat-error>
+        </mat-form-field>
+
+        <!-- <div class="full-width inline-field-group" formGroupName="transactionrole">
+          <label class="group-label">Select Transaction Role *</label>
+          <mat-checkbox formControlName="maker">Maker</mat-checkbox>
+          <mat-checkbox formControlName="reviewer">Reviewer</mat-checkbox>
+          <mat-checkbox formControlName="checker">Checker</mat-checkbox>
+        </div> -->
+
+        <mat-form-field appearance="outline">
+          <mat-label>Employee Type</mat-label>
+          <mat-select formControlName="employeetype">
+            <mat-option value="BPRG">BPRG</mat-option>
+            <mat-option value="Other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Select Grade</mat-label>
+          <mat-select formControlName="grade">
+            <mat-option value="Select">Select</mat-option>
+            <mat-option value="Grade A">Grade A</mat-option>
+            <mat-option value="Grade B">Grade B</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="section-title">Employee Authentication Detail</div>
+      <div class="form-grid">
+        <div class="full-width inline-field-group">
+          <label class="group-label">User Classification</label>
+          <mat-radio-group formControlName="userclassification">
+            <mat-radio-button value="Staff">Staff</mat-radio-button>
+            <mat-radio-button value="Contract/External">Contract/External</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>User Id</mat-label>
+          <input matInput formControlName="userid" placeholder="Enter user id">
+          <mat-error *ngIf="employeeForm.get('userid')?.hasError('required')">User Id is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile No.</mat-label>
+          <input matInput formControlName="mobileno" placeholder="Enter mobile number">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email ID</mat-label>
+          <input matInput formControlName="emailid" placeholder="Enter email id">
+          <mat-error *ngIf="employeeForm.get('emailid')?.hasError('required')">Email ID is required</mat-error>
+          <mat-error *ngIf="employeeForm.get('emailid')?.hasError('email')">Enter a valid email address</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Expiry Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="expirydate">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="employeeForm.get('expirydate')?.hasError('required')">Expiry Date is required</mat-error>
+        </mat-form-field>
+
+        <div class="full-width inline-field-group">
+          <label class="group-label">Status *</label>
+          <mat-radio-group formControlName="status">
+            <mat-radio-button value="Active">Active</mat-radio-button>
+            <mat-radio-button value="Inactive">Inactive</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Remarks</mat-label>
+          <textarea #remarksInput matInput formControlName="remarks" rows="3" maxlength="500"></textarea>
+          <mat-hint align="end">
+            Max 500 Characters. {{ 500 - (remarksInput.value.length || 0) }} characters left.
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-raised-button color="primary" type="button" [disabled]="isLoading" (click)="onSubmit()">ADD</button>
+    <button mat-stroked-button type="button" (click)="onReset()">RESET</button>
+    <button mat-button type="button" (click)="onCancel()">CANCEL</button>
+  </mat-dialog-actions>
+</div>

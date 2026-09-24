@@ -19,11 +19,18 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ConfirmDialogComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -38,14 +45,18 @@ import { MatMenuModule } from '@angular/material/menu';
     RouterModule,
     HttpClientModule,
     MatFormFieldModule,
-
     MatTabsModule,
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
     MatPaginatorModule,
-    MatMenuModule
+    MatMenuModule,
+    MatExpansionModule ,
+    MatDialogModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    
   ],
   exports:[
     CommonModule,
@@ -61,15 +72,18 @@ import { MatMenuModule } from '@angular/material/menu';
     RouterModule,
     HttpClientModule,
     MatFormFieldModule,
-
     MatTabsModule,
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
     MatPaginatorModule,
-    MatMenuModule
-   
+    MatMenuModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }
