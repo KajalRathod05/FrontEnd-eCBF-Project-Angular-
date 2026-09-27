@@ -1,0 +1,177 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      {{ isViewOnly ? 'View' : 'Edit' }} Role Rights
+    </h2>
+    <button mat-icon-button type="button" (click)="onCancel()" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="roleRightsForm">
+      <div class="section-title">Role Rights General Detail</div>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Role Code</mat-label>
+          <input matInput formControlName="rolecode" placeholder="Enter role code">
+          <mat-error *ngIf="roleRightsForm.get('rolecode')?.hasError('required')">
+            Role Code is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role Name</mat-label>
+          <input matInput formControlName="rolename" placeholder="Enter role name">
+          <mat-error *ngIf="roleRightsForm.get('rolename')?.hasError('required')">
+            Role Name is required
+          </mat-error>
+        </mat-form-field>
+
+        
+      </div>
+
+      <div class="section-title">Module & Master Rights</div>
+
+      <div formArrayName="modules" class="modules-container">
+        <div
+          class="module-card"
+          *ngFor="let module of modules.controls; let moduleIndex = index"
+          [formGroupName]="moduleIndex">
+
+          <div class="module-header">
+            <div class="module-title">
+              <mat-checkbox
+                formControlName="isSelected"
+                (change)="onModuleToggle(moduleIndex)">
+                {{ module.get('modulename')?.value }}
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <div class="table-container" formArrayName="masters">
+            <table
+              mat-table
+              [dataSource]="getMastersArray(moduleIndex).controls"
+              class="rights-table">
+
+              <ng-container matColumnDef="mastername">
+                <th mat-header-cell *matHeaderCellDef>Master Name</th>
+                <td
+                  mat-cell
+                  *matCellDef="let master; let masterIndex = index"
+                  [formGroupName]="masterIndex">
+                  {{ master.get('mastername')?.value }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="add">
+                <th mat-header-cell *matHeaderCellDef>Add</th>
+                <td
+                  mat-cell
+                  *matCellDef="let master; let masterIndex = index"
+                  [formGroupName]="masterIndex">
+                  <mat-checkbox formControlName="addopn"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef>Edit</th>
+                <td
+                  mat-cell
+                  *matCellDef="let master; let masterIndex = index"
+                  [formGroupName]="masterIndex">
+                  <mat-checkbox formControlName="editopn"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef>View</th>
+                <td
+                  mat-cell
+                  *matCellDef="let master; let masterIndex = index"
+                  [formGroupName]="masterIndex">
+                  <mat-checkbox formControlName="viewopn"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Delete</th>
+                <td
+                  mat-cell
+                  *matCellDef="let master; let masterIndex = index"
+                  [formGroupName]="masterIndex">
+                  <mat-checkbox formControlName="deleteopn"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="full-width inline-field-group">
+            <label class="group-label">Status *</label>
+            <mat-radio-group formControlName="status">
+            <mat-radio-button value="Active">Active</mat-radio-button>
+            <mat-radio-button value="Inactive">Inactive</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Remarks</mat-label>
+            <textarea
+            #remarksInput
+            matInput
+            formControlName="remarks"
+            rows="3"
+            maxlength="500">
+            </textarea>
+            <mat-hint align="end">
+            Max 500 Characters. {{ 500 - (remarksInput.value.length || 0) }} characters left.
+            </mat-hint>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <ng-container *ngIf="!isViewOnly">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="isLoading"
+        (click)="onSubmit()">
+        UPDATE
+      </button>
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onReset()">
+        RESET
+      </button>
+
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        CANCEL
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="isViewOnly">
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onCancel()">
+        CLOSE
+      </button>
+    </ng-container>
+  </mat-dialog-actions>
+</div>

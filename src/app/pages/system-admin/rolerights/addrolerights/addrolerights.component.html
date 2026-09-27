@@ -1,0 +1,122 @@
+<div class="dialog-container">
+  <!-- Dialog Header -->
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Add Role Right</h2>
+    <button mat-icon-button type="button" (click)="onCancel()" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Dialog Body -->
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="roleRightsForm">
+
+      <!-- General Info Section -->
+      <div class="section-title">Role Details</div>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Role Code</mat-label>
+          <input matInput formControlName="rolecode" placeholder="Enter role code">
+          <mat-error *ngIf="roleRightsForm.get('rolecode')?.hasError('required')">Role Code is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role Name</mat-label>
+          <input matInput formControlName="rolename" placeholder="Enter role name">
+          <mat-error *ngIf="roleRightsForm.get('rolename')?.hasError('required')">Role Name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Module & Master Permission Section -->
+      <div class="section-title">Permission Modules</div>
+
+      <div formArrayName="modules">
+        <div *ngFor="let modGroup of modules.controls; let i = index" [formGroupName]="i" class="module-card">
+          
+          <!-- Parent Module Select Checkbox -->
+          <div class="module-header">
+            <mat-checkbox 
+              formControlName="isSelected" 
+              (change)="onModuleToggle(i)" 
+              color="primary">
+              <strong>{{ modGroup.get('modulename')?.value }}</strong>
+            </mat-checkbox>
+          </div>
+
+          <!-- Master Rights Table (Revealed when parent module is checked) -->
+          <div *ngIf="modGroup.get('isSelected')?.value" class="table-wrapper">
+            <table mat-table [dataSource]="getMastersArray(i).controls" class="full-width">
+
+              <!-- Master Name Column -->
+              <ng-container matColumnDef="mastername">
+                <th mat-header-cell *matHeaderCellDef> Master Name </th>
+                <td mat-cell *matCellDef="let element"> 
+                  {{ element.get('mastername').value }} 
+                </td>
+              </ng-container>
+
+              <!-- Add Checkbox Column -->
+              <ng-container matColumnDef="add">
+                <th mat-header-cell *matHeaderCellDef> Add </th>
+                <td mat-cell *matCellDef="let element" [formGroup]="element">
+                  <mat-checkbox formControlName="addopn" color="primary"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- Edit Checkbox Column -->
+              <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef> Edit </th>
+                <td mat-cell *matCellDef="let element" [formGroup]="element">
+                  <mat-checkbox formControlName="editopn" color="primary"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- View Checkbox Column -->
+              <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef> View </th>
+                <td mat-cell *matCellDef="let element" [formGroup]="element">
+                  <mat-checkbox formControlName="viewopn" color="primary"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- Delete Checkbox Column -->
+              <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef> Delete </th>
+                <td mat-cell *matCellDef="let element" [formGroup]="element">
+                  <mat-checkbox formControlName="deleteopn" color="warn"></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="full-width inline-field-group">
+        <label class="group-label">Status *</label>
+        <mat-radio-group formControlName="status">
+        <mat-radio-button value="Active">Active</mat-radio-button>
+        <mat-radio-button value="Inactive">Inactive</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Remarks</mat-label>
+        <textarea #remarksInput matInput formControlName="remarks" rows="3" maxlength="500"></textarea>
+        <mat-hint align="end">
+        Max 500 Characters. {{ 500 - (remarksInput.value.length || 0) }} characters left.
+        </mat-hint>
+      </mat-form-field>
+
+    </form>
+  </mat-dialog-content>
+
+  <!-- Dialog Footer Actions -->
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-raised-button color="primary" type="button" [disabled]="isLoading" (click)="onSubmit()">ADD</button>
+    <button mat-stroked-button type="button" (click)="onReset()">RESET</button>
+    <button mat-button type="button" (click)="onCancel()">CANCEL</button>
+  </mat-dialog-actions>
+</div>

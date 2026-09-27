@@ -1,0 +1,40 @@
+<mat-sidenav-container class="layout-container">
+
+  <!-- SIDENAV COMPONENT -->
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="!isMobile">
+    <app-sidebar 
+      [isMobile]="isMobile" 
+      [activeModule]="selectedModule" 
+      (logout)="logout()">
+    </app-sidebar>
+  </mat-sidenav>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <mat-sidenav-content>
+    <!-- HEADER COMPONENT -->
+    <app-header 
+      [isMobile]="isMobile" 
+      [username]="username" 
+      [menuItems]="menuItems" 
+      [selectedModule]="selectedModule" 
+      (toggleDrawer)="drawer.toggle()" 
+      (moduleSelected)="onModuleSelect($event)" 
+      (logout)="logout()">
+    </app-header>
+
+    <!-- DYNAMIC ROUTE PAGE CONTENT -->
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- FOOTER -->
+    <!-- <footer class="footer">
+      © 2026 My App | All Rights Reserved
+    </footer> -->
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

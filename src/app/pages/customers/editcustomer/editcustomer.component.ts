@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CustomerService } from '../../../services/customer.service';
+import { MasterserviceService } from '../../../services/masterservice.service';
 
 @Component({
   selector: 'app-editcustomer',
@@ -17,7 +17,7 @@ export class EditcustomerComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private customerService: CustomerService,
+    private customerService: MasterserviceService,
     private router: Router
   ) {}
 

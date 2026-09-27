@@ -18,10 +18,10 @@ export class LoginService {
   }
 
   registerUser(data: any): Observable<string> {
-    return this.http.post<string>(this.baseUrl+"/auth/userRegister",data,{ responseType: 'text' as 'json'});
+    return this.http.post<string>(this.baseUrl+"/auth/userRegister",data);
   }
 
    resetPassword(data: any): Observable<string> {
-    return this.http.post<string>(this.baseUrl+"/auth/resetPassword",data,{ responseType: 'text' as 'json'});
+    return this.http.post<string>(this.baseUrl+"/auth/resetPassword",data);
   }
 }

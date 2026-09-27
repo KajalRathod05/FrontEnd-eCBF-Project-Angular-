@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+.header {
+  background-color: hwb(210 1% 35%); /* Standard Angular Material Primary Blue */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .app-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-right: 24px;
+    white-space: nowrap;
+  }
+
+  .horizontal-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .top-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.85); /* Slightly transparent white for unselected */
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+
+      mat-icon {
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+      }
+
+      &.active {
+        background-color: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .username {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #ffffff;
+    margin-right: 12px;
+
+    mat-icon {
+      font-size: 22px;
+      height: 22px;
+      width: 22px;
+    }
+  }
+
+  button[mat-icon-button] {
+    color: #ffffff;
+  }
+}

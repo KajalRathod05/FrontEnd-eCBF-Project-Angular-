@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomerService } from '../../../services/customer.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MasterserviceService } from '../../../services/masterservice.service';
 
 @Component({
   selector: 'app-addcustomer',
@@ -18,7 +18,7 @@ export class AddcustomerComponent {
 
     constructor(
       private fb: FormBuilder,
-      private customerService: CustomerService,
+      private customerService: MasterserviceService,
       private toastr: ToastrService,
       private router: Router
     ) {}

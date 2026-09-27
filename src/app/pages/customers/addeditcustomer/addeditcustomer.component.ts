@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { CustomerService } from '../../../services/customer.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MasterserviceService } from '../../../services/masterservice.service';
 
 @Component({
   selector: 'app-addeditcustomer',
@@ -45,7 +45,7 @@ export class AddeditcustomerComponent implements OnInit{
   }
 
   constructor(
-    private customerService: CustomerService,
+    private customerService: MasterserviceService,
     private router:Router) {}
 
   ngOnInit() {

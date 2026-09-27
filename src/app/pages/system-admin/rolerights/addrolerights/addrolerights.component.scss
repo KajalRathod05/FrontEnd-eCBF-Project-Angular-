@@ -1,0 +1,108 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+.dialog-content {
+  padding: 16px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.section-title {
+  background-color: #2b4c7e;
+  color: #ffffff;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 12px 0;
+  border-radius: 2px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.inline-field-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0 16px;
+
+  .group-label {
+    font-weight: 500;
+    min-width: 180px;
+  }
+}
+
+// Module Accordion/Card Styles
+.module-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  background-color: #fcfcfc;
+  overflow: hidden;
+
+  .module-header {
+    padding: 10px 14px;
+    background-color: #f1f5f9;
+
+    strong {
+      color: #1e293b;
+      font-size: 0.95rem;
+    }
+  }
+
+  .table-wrapper {
+    padding: 8px 12px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #ffffff;
+
+    table {
+      width: 100%;
+
+      th.mat-header-cell {
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+      }
+
+      td.mat-cell, th.mat-header-cell {
+        &:not(:first-child) {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+.dialog-actions {
+  padding: 12px 16px;
+  border-top: 1px solid #e0e0e0;
+  gap: 8px;
+}

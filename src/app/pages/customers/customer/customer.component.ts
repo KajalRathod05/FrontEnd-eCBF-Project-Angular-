@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit ,Output,ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { CustomerService } from '../../../services/customer.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MasterserviceService } from '../../../services/masterservice.service';
 
 @Component({
   selector: 'app-customer',
@@ -39,7 +38,7 @@ export class CustomerComponent implements OnInit{
     { id: 4, name: 'Education Loan' }
   ];
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private customerService: MasterserviceService) {}
 
   ngOnInit(): void {
     //this.loadCustomers();
