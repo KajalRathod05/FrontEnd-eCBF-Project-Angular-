@@ -44,7 +44,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
         // Redirect to login
         if (!router.url.startsWith('/login')) {
-          toastr.error('JWT expired or unauthorized.', 'Error');
+          toastr.error('Session expired! Kindly log in again.', 'Error');
           console.log('Redirecting to login page...');
           router.navigate(['/login']);
         }

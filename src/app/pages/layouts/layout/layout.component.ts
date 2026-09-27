@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavServiceService } from '../../../services/nav-service.service';
 import { MenuItem } from '../../../models/menu-items';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-layout',
@@ -20,7 +21,8 @@ export class LayoutComponent implements OnInit {
   constructor(
     private navService: NavServiceService,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -47,9 +49,12 @@ export class LayoutComponent implements OnInit {
   }
 
   logout(): void {
-    if (confirm('Are you sure you want to logout?')) {
-      sessionStorage.clear();
-      this.router.navigate(['/login']);
-    }
+    const message = `Are you sure you want to logout?`;
+    this.dialogService.confirm(message, 'Logout').subscribe((confirmed) => {
+       if (confirmed) {
+        sessionStorage.clear();
+        this.router.navigate(['/login']);
+      }
+   });
   }
 }

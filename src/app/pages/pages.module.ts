@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PagesRoutingModule } from './pages-routing.module';
 import { LayoutComponent } from './layouts/layout/layout.component';
 import { SharedModule } from '../shared/shared.module';
@@ -32,6 +31,19 @@ import { LocationComponent } from './system-admin/demography/location/location/l
 import { AddlocationComponent } from './system-admin/demography/location/addlocation/addlocation.component';
 import { EditstateComponent } from './system-admin/demography/state/editstate/editstate.component';
 import { EditlocationComponent } from './system-admin/demography/location/editlocation/editlocation.component';
+import { RepaymentComponent } from './loan-booking/liquidation/repayment/repayment.component';
+import { LoanbookComponent } from './loan-booking/loan-book/loanbook/loanbook.component';
+import { BorrowerComponent } from './borrower/borrower/borrower.component';
+import { AddborrowerComponent } from './borrower/addborrower/addborrower.component';
+import { BorrowerReportComponent } from './mis-reports/borrower-report/borrower-report.component';
+import { EditborrowerComponent } from './borrower/editborrower/editborrower.component';
+import { LaonbookedReportComponent } from './mis-reports/laonbooked-report/laonbooked-report.component';
+import { InsuranceComponent } from './warehose-insurance/insurance/insurance/insurance.component';
+import { WarehouseComponent } from './warehose-insurance/warehouse/warehouse/warehouse.component';
+import { AddinsuranceComponent } from './warehose-insurance/insurance/addinsurance/addinsurance.component';
+import { AddwarehouseComponent } from './warehose-insurance/warehouse/addwarehouse/addwarehouse.component';
+import { EditinsuranceComponent } from './warehose-insurance/insurance/editinsurance/editinsurance.component';
+import { EditwarehouseComponent } from './warehose-insurance/warehouse/editwarehouse/editwarehouse.component';
 
 
 @NgModule({
@@ -65,6 +77,19 @@ import { EditlocationComponent } from './system-admin/demography/location/editlo
     AddlocationComponent,
     EditstateComponent,
     EditlocationComponent,
+    RepaymentComponent,
+    LoanbookComponent,
+    BorrowerComponent,
+    AddborrowerComponent,
+    BorrowerReportComponent,
+    EditborrowerComponent,
+    LaonbookedReportComponent,
+    InsuranceComponent,
+    WarehouseComponent,
+    AddinsuranceComponent,
+    AddwarehouseComponent,
+    EditinsuranceComponent,
+    EditwarehouseComponent,
     
   ],
   imports: [

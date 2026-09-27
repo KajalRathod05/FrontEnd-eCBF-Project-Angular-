@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from '../login.service';
 
@@ -62,14 +61,15 @@ export class LoginComponent {
   console.log('Register Request:', registerData);
   this.loginService.registerUser(registerData)
     .subscribe({
-      next: (response: string) => {
-        this.toastr.success(response,'Success' );
+      next: (response: any) => {
+        this.toastr.success(response.message,'Success' );
         this.isRegisterMode = false;
         this.isLoading = false;
         this.loginForm.reset();
       },
-      error: (error: HttpErrorResponse) => {
-        this.toastr.error(error.error, 'Registration Failed');
+      error: (error) => {
+        const errorMessage = error.error?.message || error.error || 'Registration Failed';
+        this.toastr.error(errorMessage, 'Error');
       }
      });
 }
@@ -87,31 +87,16 @@ loginUser() {
         next: (response) => {
           console.log('Login response:', "ok");
           this.isLoading = false;
-
           this.toastr.success("Login Success!",'Success');
-          //sessionStorage.setItem('email', email);
-          //sessionStorage.setItem('userid', response.userid.toString());
-          //console.log('jwt:::',response.jwt);
           sessionStorage.setItem('username', username);
           sessionStorage.setItem('token', response.jwt);
           this.router.navigate(['/pages/dashboard']);
         },
-        error: (error: HttpErrorResponse) => {
+        error: (error) => {
           console.error('Login failed:', error);
-
-          this.isLoading = false;
-          if (error.status == 401) {
-            this.toastr.error(error.error ,'Login Failed');
-          }
-          if (error.status == 400) {
-            this.toastr.error('Invalid Credentials' ,'Login Failed');
-          }
-          else if (error.status == 0) {
-            this.toastr.error('Unable to connect to server. Please check your backend.', 'Connection Error');
-          }
-          else {
-            this.toastr.error( 'Something went wrong. Please try again.','Error');
-          } 
+          this.isLoading = false; 
+          const errorMessage = error.error?.message || error.error || 'Login Failed';
+          this.toastr.error(errorMessage, 'Error');
         }
       });
  }

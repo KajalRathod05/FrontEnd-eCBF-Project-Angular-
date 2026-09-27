@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { HttpErrorResponse } from '@angular/common/http';
 import { LoginService } from '../login.service';
 
 @Component({
@@ -57,33 +56,22 @@ export class ForgotpasswordComponent {
 
     this.loginService.resetPassword(passwordData)
       .subscribe({
-        next: (response: string) => {
+        next: (response: any) => {
           this.isLoading = false;
 
-          this.toastr.success( response,'Success');
+          this.toastr.success( response.message,'Success');
           this.loginForm.reset();
           
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 1000);
         },
-        error: (error: HttpErrorResponse) => {
+        error: (error) => {
 
           this.isLoading = false;
           console.error('Password reset failed:',error);
-
-          if (error.status == 404) {
-            this.toastr.error(error.error );
-          } 
-          else if (error.status == 400) {
-            this.toastr.error(error.error || 'Invalid password details.','Reset Password Failed');
-          } 
-          else if (error.status == 0) {
-            this.toastr.error('Unable to connect to server. Please check your backend.','Connection Error');
-          } 
-          else {
-             this.toastr.error('Something went wrong. Please try again.','Error');
-          }
+          const errorMessage = error.error?.message || error.error || 'Login Failed';
+          this.toastr.error(errorMessage, 'Error');
         }
       });       
  }

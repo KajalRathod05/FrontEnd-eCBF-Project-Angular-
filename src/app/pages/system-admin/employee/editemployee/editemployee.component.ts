@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { MasterDialogData } from '../../../../services/dialog.service';
-import { EmployeeService } from '../../../../services/employee.service';
+import { MasterserviceService } from '../../../../services/masterservice.service';
 
 @Component({
   selector: 'app-editemployee',
@@ -19,7 +19,7 @@ export class EditemployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private employeeService: EmployeeService,
+    private employeeService: MasterserviceService,
     private toastr: ToastrService,
     @Optional() public dialogRef: MatDialogRef<EditemployeeComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: MasterDialogData

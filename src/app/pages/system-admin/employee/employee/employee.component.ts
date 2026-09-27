@@ -2,11 +2,11 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Employee } from '../../../../models/emplyee';
-import { EmployeeService } from '../../../../services/employee.service';
 import { DialogService } from '../../../../services/dialog.service';
 import { AddemployeeComponent } from '../addemployee/addemployee.component';
 import { EditemployeeComponent } from '../editemployee/editemployee.component';
 import { ToastrService } from 'ngx-toastr';
+import { MasterserviceService } from '../../../../services/masterservice.service';
 
 @Component({
   selector: 'app-employee',
@@ -22,7 +22,7 @@ export class EmployeeComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private employeeService: EmployeeService,
+    private employeeService: MasterserviceService,
     private dialogService: DialogService,
     private toastr: ToastrService
   ) {}

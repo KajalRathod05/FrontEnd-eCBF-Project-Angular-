@@ -1,8 +1,8 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from '../../../../services/employee.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { MasterserviceService } from '../../../../services/masterservice.service';
 
 @Component({
   selector: 'app-addemployee',
@@ -17,7 +17,7 @@ export class AddemployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private employeeService: EmployeeService,
+    private employeeService: MasterserviceService,
     private toastr: ToastrService,
     @Optional() public dialogRef: MatDialogRef<AddemployeeComponent>
   ) {}
