@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from './environment';
 import { LoginResponse } from '../models/login-response';
+import { MenuModule } from '../models/menu-master';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class LoginService {
 
    resetPassword(data: any): Observable<string> {
     return this.http.post<string>(this.baseUrl+"/auth/resetPassword",data);
+  }
+
+  getUserMenu(userid: number) {
+    return this.http.get<MenuModule[]>(`${this.baseUrl}/menu/${userid}`);
   }
 }

@@ -43,12 +43,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Role</mat-label>
-          <mat-select formControlName="role">
-            <mat-option value="Admin">Admin</mat-option>
-            <mat-option value="User">User</mat-option>
-            <mat-option value="Manager">Manager</mat-option>
+          <mat-select formControlName="roleid">
+             <mat-option *ngFor="let role of roleList" [value]="role.roleid">
+              {{ role.rolename }}
+             </mat-option>
           </mat-select>
-          <mat-error *ngIf="employeeForm.get('role')?.hasError('required')">Role is required</mat-error>
+          <mat-error *ngIf="employeeForm.get('roleid')?.hasError('required')">
+           Role is required
+          </mat-error>
         </mat-form-field>
 
         <!-- <div class="full-width inline-field-group" formGroupName="transactionrole">

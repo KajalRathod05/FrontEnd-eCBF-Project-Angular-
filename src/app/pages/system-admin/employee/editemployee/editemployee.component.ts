@@ -16,6 +16,7 @@ export class EditemployeeComponent implements OnInit {
   employeeForm!: FormGroup;
   isLoading = false;
   isViewOnly = false;
+  roleList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +29,7 @@ export class EditemployeeComponent implements OnInit {
   ngOnInit(): void {
     this.isViewOnly = !!this.dialogData?.isViewOnly;
     this.loadEmployees();
+    this.loadRoles();
 
     if (this.dialogData?.data) {
       this.employeeForm.patchValue(this.dialogData.data);
@@ -38,6 +40,19 @@ export class EditemployeeComponent implements OnInit {
     }
   }
 
+  loadRoles(): void {
+    this.employeeService.getActiveRoles().subscribe({
+      next: (response: any) => {
+        console.log("update role::", response.roles);
+        this.roleList = response.roles;
+      },
+      error: (error) => {
+        const errorMessage = error.error?.message || error.error || 'Failed to load roles';
+        this.toastr.error(errorMessage, 'Validation Error');
+      }
+    });
+  }
+
   loadEmployees(): void {
     this.employeeForm = this.fb.group({
       employeeid: [null],
@@ -45,7 +60,7 @@ export class EditemployeeComponent implements OnInit {
       employeecode: ['', Validators.required],
       branch: ['', Validators.required],
       department: ['', Validators.required],
-      role: ['', Validators.required],
+      roleid: ['', Validators.required],
       // transactionrole: this.fb.group({
       //   maker: [false],
       //   reviewer: [false],
