@@ -50,6 +50,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
+      if (error.status === 403) {
+        toastr.error(
+          'You do not have permission to perform this action.',
+          'Access Denied'
+        );
+      }
+
       return throwError(() => error);
     })
   );

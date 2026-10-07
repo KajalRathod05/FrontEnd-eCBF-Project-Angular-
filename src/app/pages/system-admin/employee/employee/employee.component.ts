@@ -7,6 +7,7 @@ import { AddemployeeComponent } from '../addemployee/addemployee.component';
 import { EditemployeeComponent } from '../editemployee/editemployee.component';
 import { ToastrService } from 'ngx-toastr';
 import { MasterserviceService } from '../../../../services/masterservice.service';
+import { NavServiceService } from '../../../../services/nav-service.service';
 
 @Component({
   selector: 'app-employee',
@@ -16,18 +17,32 @@ import { MasterserviceService } from '../../../../services/masterservice.service
 })
 export class EmployeeComponent implements OnInit,AfterViewInit {
  
-  displayedColumns: string[] = ['employeecode', 'name', 'department', 'status', 'view', 'edit', 'delete'];
+  displayedColumns: string[] = ['employeecode', 'userid', 'name', 'department', 'status', 'view', 'edit', 'delete'];
   dataSource = new MatTableDataSource<Employee>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  canAdd = false;
+  canEdit = false;
+  canView = false;
+  canDelete = false;
+
   constructor(
-    private employeeService: MasterserviceService,
+    private masterService: MasterserviceService,
     private dialogService: DialogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private navService: NavServiceService
   ) {}
 
   ngOnInit(): void {
+    this.navService.menuLoaded$.subscribe(loaded => {
+      if (loaded) {
+        this.canAdd = this.navService.hasPermission(1, 'ADD');
+        this.canEdit = this.navService.hasPermission(1, 'EDIT');
+        this.canView = this.navService.hasPermission(1, 'VIEW');
+        this.canDelete = this.navService.hasPermission(1, 'DELETE');
+      }
+    });
     this.loadEmployees();
   }
 
@@ -36,7 +51,7 @@ export class EmployeeComponent implements OnInit,AfterViewInit {
   }
 
   loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
+    this.masterService.getAllEmployees().subscribe({
       next: (response: any) => {
         this.dataSource.data = response.employees;
       },
@@ -64,11 +79,24 @@ export class EmployeeComponent implements OnInit,AfterViewInit {
   }
 
   onView(employee: Employee): void {
-    this.openEditDialog(employee, true);
+    this.getEmployeeById(employee, true);
   }
 
   onEdit(employee: Employee): void {
-    this.openEditDialog(employee, false);
+    this.getEmployeeById(employee, false);
+  }
+
+  getEmployeeById(employee: any, isViewOnly: boolean): void {
+    this.masterService.getEmployee(employee.employeeid).subscribe({
+      next: (response: any) => {
+        console.log('Employee By ID for Edit:', response.employee);
+        this.openEditDialog(response.employee, isViewOnly);
+      },
+      error: (error) => {
+         const errorMessage = error.error?.message || error.error || 'Failed to fetch enmployee';
+        this.toastr.error(errorMessage, 'Error');
+      }
+    });
   }
 
   onDelete(employee: Employee): void {
@@ -77,7 +105,7 @@ export class EmployeeComponent implements OnInit,AfterViewInit {
     this.dialogService.confirm(message, 'Delete Employee').subscribe((confirmed) => {
    
       if (confirmed) {
-        this.employeeService.deleteEmployee(employee.employeeid!).subscribe({
+        this.masterService.deleteEmployee(employee.employeeid!).subscribe({
           next: (response :any) => {
             this.toastr.success(response.message, 'Success');
             this.loadEmployees();

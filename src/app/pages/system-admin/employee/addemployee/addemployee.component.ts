@@ -14,6 +14,7 @@ export class AddemployeeComponent implements OnInit {
 
   employeeForm!: FormGroup;
   isLoading = false;
+  roleList: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +25,20 @@ export class AddemployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.loadRoles();
+  }
+
+    loadRoles(): void {
+    this.employeeService.getActiveRoles().subscribe({
+      next: (response: any) => {
+        console.log("roles::", response.roles);
+        this.roleList = response.roles;
+      },
+      error: (error) => {
+        const errorMessage = error.error?.message || error.error || 'Failed to load roles';
+        this.toastr.error(errorMessage, 'Validation Error');
+      }
+    });
   }
 
   initForm(): void {
@@ -32,7 +47,7 @@ export class AddemployeeComponent implements OnInit {
       employeecode: ['', Validators.required],
       branch: ['', Validators.required],
       department: ['', Validators.required],
-      role: ['', Validators.required],
+      roleid: ['', Validators.required],
       // transactionrole: this.fb.group({
       //   maker: [true],
       //   reviewer: [false],

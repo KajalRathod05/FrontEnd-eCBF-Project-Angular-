@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MasterDialogData } from '../../../../services/dialog.service';
 
 export interface MasterItem {
+  pagetypeid: number;
   mastername: string;
 }
 
@@ -28,41 +29,7 @@ export class EditrolerightsComponent implements OnInit {
   isViewOnly = false;
 
   displayedColumns: string[] = ['mastername', 'add', 'edit', 'view', 'delete'];
-
-  moduleList: ModuleMaster[] = [
-    {
-      moduleid: 1,
-      modulename: 'System Admin',
-      masters: [
-        { mastername: 'Employee Master' },
-        { mastername: 'RoleRights Master' },
-        { mastername: 'Commodity Master' }
-      ]
-    },
-    {
-      moduleid: 2,
-      modulename: 'Warehouse And Insurance',
-      masters: [
-        { mastername: 'Warehouse Master' },
-        { mastername: 'Insurance Master' }
-      ]
-    },
-    {
-      moduleid: 3,
-      modulename: 'Borrower',
-      masters: [
-        { mastername: 'Borrower Master' }
-      ]
-    },
-    {
-      moduleid: 4,
-      modulename: 'Loan Booking',
-      masters: [
-        { mastername: 'Loan Booking Master' },
-        { mastername: 'Repayment Master' }
-      ]
-    }
-  ];
+  moduleList: ModuleMaster[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -75,10 +42,11 @@ export class EditrolerightsComponent implements OnInit {
   ngOnInit(): void {
     this.isViewOnly = !!this.dialogData?.isViewOnly;
     this.initForm();
+    this.loadModules();
 
-    if (this.dialogData?.data) {
-      this.patchRoleRightsData(this.dialogData.data);
-    }
+    // if (this.dialogData?.data) {
+    //   this.patchRoleRightsData(this.dialogData.data);
+    // }
 
     if (this.isViewOnly) {
       this.roleRightsForm.disable();
@@ -94,8 +62,6 @@ export class EditrolerightsComponent implements OnInit {
       remarks: [''],
       modules: this.fb.array([])
     });
-
-    this.populateModules();
   }
 
   get modules(): FormArray {
@@ -103,6 +69,7 @@ export class EditrolerightsComponent implements OnInit {
   }
 
   populateModules(): void {
+    this.modules.clear();
     this.moduleList.forEach(mod => {
       const moduleGroup = this.fb.group({
         moduleid: [mod.moduleid],
@@ -116,6 +83,7 @@ export class EditrolerightsComponent implements OnInit {
       mod.masters.forEach(m => {
         mastersArray.push(
           this.fb.group({
+            pagetypeid: [m.pagetypeid],
             mastername: [m.mastername],
             addopn: [false],
             editopn: [false],
@@ -154,12 +122,15 @@ export class EditrolerightsComponent implements OnInit {
       let moduleHasPermission = false;
 
       mastersArray.controls.forEach(masterControl => {
-        const masterName = masterControl.get('mastername')?.value;
+        //const masterName = masterControl.get('mastername')?.value;
+        const pageTypeId = masterControl.get('pagetypeid')?.value;
 
         const existingRight = userRights.find((right: any) =>
-          Number(right.moduleid) === Number(moduleId) &&
-          right.mastername === masterName
+          //Number(right.moduleid) === Number(moduleId) &&
+           Number(right.pagetypeid) === Number(pageTypeId)
+
         );
+        
 
         if (existingRight) {
           const add = Number(existingRight.addopn) === 1;
@@ -226,6 +197,7 @@ export class EditrolerightsComponent implements OnInit {
         if (hasPermission) {
           userRightsMSTPayload.push({
             moduleid: mod.moduleid,
+            pagetypeid: m.pagetypeid,
             mastername: m.mastername,
             addopn: m.addopn ? 1 : 0,
             editopn: m.editopn ? 1 : 0,
@@ -275,5 +247,31 @@ export class EditrolerightsComponent implements OnInit {
   onCancel(): void {
     this.dialogRef?.close(false);
   }
+
+  loadModules() {
+  this.isLoading = true;
+
+  this.masterService.getModulesWithMasters().subscribe({
+    next:(response: any) => {
+
+      this.moduleList = response.modules;
+      console.log('Modules with Masters: ', this.moduleList);
+      this.populateModules();
+
+      if (this.dialogData?.data) {
+        this.patchRoleRightsData(this.dialogData.data);
+      }
+      if (this.isViewOnly) {
+        this.roleRightsForm.disable();
+      }
+      this.isLoading = false;
+    },
+    error: (error) => {
+      this.isLoading = false;
+      const message = error.error?.message || 'Failed to load modules and masters';
+      this.toastr.error(message, 'Error');
+    }
+  });
+}
 
 }

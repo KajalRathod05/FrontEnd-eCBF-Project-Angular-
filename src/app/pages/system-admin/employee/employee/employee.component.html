@@ -17,10 +17,16 @@
         <td mat-cell *matCellDef="let element"> {{element.employeecode}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="userid">
+        <th mat-header-cell *matHeaderCellDef> User ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.userid}} </td>
+      </ng-container>
+
+
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
+      </ng-container> 
 
       <ng-container matColumnDef="department">
         <th mat-header-cell *matHeaderCellDef> Department </th>
@@ -39,27 +45,42 @@
       <ng-container matColumnDef="view">
         <th mat-header-cell *matHeaderCellDef> View </th>
         <td mat-cell *matCellDef="let element">
-           <button mat-icon-button color="primary" (click)="onView(element)" matTooltip="View">
-            <mat-icon>visibility</mat-icon>
-          </button>
+          <ng-container *ngIf="canView; else viewNotAvailable">
+            <button mat-icon-button color="primary" (click)="onView(element)" matTooltip="View">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #viewNotAvailable>
+            <span>Not Available</span>
+          </ng-template>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef> Edit </th>
         <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="canEdit; else editNotAvailable">
             <button mat-icon-button color="accent" (click)="onEdit(element)" matTooltip="Edit">
-            <mat-icon>edit</mat-icon>
-          </button>
+              <mat-icon>edit</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #editNotAvailable>
+            <span>Not Available</span>
+          </ng-template>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef> Delete </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="warn" (click)="onDelete(element)" matTooltip="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <ng-container *ngIf="canDelete; else deleteNotAvailable">
+            <button mat-icon-button color="warn" (click)="onDelete(element)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </ng-container>
+          <ng-template #deleteNotAvailable>
+            <span>Not Available</span>
+          </ng-template>
         </td>
       </ng-container>
 

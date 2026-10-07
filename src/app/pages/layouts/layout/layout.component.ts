@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NavServiceService } from '../../../services/nav-service.service';
 import { MenuItem } from '../../../models/menu-items';
 import { DialogService } from '../../../services/dialog.service';
+import { LoginService } from '../../../auth/login.service';
 
 @Component({
   selector: 'app-layout',
@@ -23,15 +24,33 @@ export class LayoutComponent implements OnInit {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private dialogService: DialogService,
+    private loginService: LoginService
   ) {}
 
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username');
-    this.menuItems = this.navService.menuItems;
+    const userid = sessionStorage.getItem('userid');
 
-    // Default to the first module if available
-    if (this.menuItems.length > 0) {
-      this.selectedModule = this.menuItems[0];
+     if (userid) {
+       this.loginService.getUserMenu(Number(userid)).subscribe({
+        next: (menuResponse: any) => {
+          const menuItems: MenuItem[] =
+            this.navService.convertMenuToMenuItems(menuResponse.modules);
+            this.navService.setMenuItems(menuItems);
+            this.menuItems = menuItems;
+          if (this.menuItems.length > 0) {
+            this.selectedModule = this.menuItems[0];
+          }
+        },
+        error: (error) => {
+          console.error('Failed to restore user menu:', error);
+        }
+      });
+    } else {
+      this.menuItems = this.navService.getMenuItems();
+      if (this.menuItems.length > 0) {
+        this.selectedModule = this.menuItems[0];
+      }
     }
 
     this.breakpointObserver
@@ -53,6 +72,7 @@ export class LayoutComponent implements OnInit {
     this.dialogService.confirm(message, 'Logout').subscribe((confirmed) => {
        if (confirmed) {
         sessionStorage.clear();
+        this.navService.clearMenuItems();
         this.router.navigate(['/login']);
       }
    });

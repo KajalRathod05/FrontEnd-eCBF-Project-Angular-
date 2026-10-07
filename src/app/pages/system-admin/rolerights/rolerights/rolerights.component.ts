@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MasterserviceService } from '../../../../services/masterservice.service';
 import { AddrolerightsComponent } from '../addrolerights/addrolerights.component';
 import { EditrolerightsComponent } from '../editrolerights/editrolerights.component';
+import { NavServiceService } from '../../../../services/nav-service.service';
 
 @Component({
   selector: 'app-rolerights',
@@ -20,13 +21,27 @@ export class RolerightsComponent implements OnInit,AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  canAdd = false;
+  canEdit = false;
+  canView = false;
+  canDelete = false;
+
   constructor(
     private masterService: MasterserviceService,
     private dialogService: DialogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private navService: NavServiceService
   ) {}
 
   ngOnInit(): void {
+    this.navService.menuLoaded$.subscribe(loaded => {
+      if (loaded) {
+        this.canAdd = this.navService.hasPermission(2, 'ADD');
+        this.canEdit = this.navService.hasPermission(2, 'EDIT');
+        this.canView = this.navService.hasPermission(2, 'VIEW');
+        this.canDelete = this.navService.hasPermission(2, 'DELETE');
+      }
+    });
     this.loadRoleRights();
   }
 
@@ -35,7 +50,7 @@ export class RolerightsComponent implements OnInit,AfterViewInit {
   }
 
   loadRoleRights(): void {
-    this.masterService.getRoleRights().subscribe({
+    this.masterService.getAllRoleRights().subscribe({
       next: (response: any) => {
         console.log('Role Rights: ', response.roleRights);
         this.dataSource.data = response.roleRights;
@@ -64,11 +79,25 @@ export class RolerightsComponent implements OnInit,AfterViewInit {
   }
 
   onView(roleRight: any): void {
-    this.openEditDialog(roleRight, true);
+    this.getRoleRightsById(roleRight, true);
   }
 
   onEdit(roleRight: any): void {
-    this.openEditDialog(roleRight, false);
+    this.getRoleRightsById(roleRight, false);
+  }
+
+
+  getRoleRightsById(roleRight: any,  isViewOnly: boolean): void {
+    this.masterService.getRoleRights(roleRight.roleid).subscribe({
+      next: (response: any) => {
+        console.log('Role Right By ID for Edit:', response.roleRight);
+        this.openEditDialog(response.roleRight, isViewOnly);
+      },
+      error: (error) => {
+         const errorMessage = error.error?.message || error.error || 'Failed to fetch role right';
+        this.toastr.error(errorMessage, 'Error');
+      }
+    });
   }
 
   onDelete(roleRight: any): void {

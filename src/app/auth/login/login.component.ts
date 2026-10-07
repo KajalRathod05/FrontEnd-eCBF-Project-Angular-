@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from '../login.service';
+import { MenuItem } from '../../models/menu-items';
+import { NavServiceService } from '../../services/nav-service.service';
+import { MenuModule } from '../../models/menu-master';
 
 @Component({
   selector: 'app-login',
@@ -21,13 +24,14 @@ export class LoginComponent {
   constructor(private fb: FormBuilder,
              private router:Router,
              private loginService: LoginService,
-             private toastr: ToastrService) {}
+             private toastr: ToastrService,
+             private navService: NavServiceService) {}
 
   ngOnInit() {
 
     this.loginForm = this.fb.group({
       username: ['',[Validators.required]],
-      //email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
    }
@@ -80,7 +84,7 @@ loginUser() {
     const username = this.loginForm.value.username;
    
     const loginData = this.loginForm.value;
-    console.log('Login Request:', loginData);
+    //console.log('Login Request:', loginData);
 
     this.loginService.userLogin(loginData)
       .subscribe({
@@ -90,7 +94,23 @@ loginUser() {
           this.toastr.success("Login Success!",'Success');
           sessionStorage.setItem('username', username);
           sessionStorage.setItem('token', response.jwt);
-          this.router.navigate(['/pages/dashboard']);
+          sessionStorage.setItem('userid', response.userid.toString());
+
+          this.loginService.getUserMenu(response.userid).subscribe({
+               next: (menuResponse :any) => {
+                const menuItems: MenuItem[] =
+                  this.navService.convertMenuToMenuItems(menuResponse.modules);
+                   console.log('setMenuItems: ', menuItems);
+                  this.navService.setMenuItems(menuItems);
+                  this.router.navigate(['/pages/dashboard']);
+              },
+              error: (error) => {
+                console.error('Failed to load user menu:', error);
+                this.toastr.error('Failed to load user permissions','Error');
+              }
+            });
+
+          //this.router.navigate(['/pages/dashboard']);
         },
         error: (error) => {
           console.error('Login failed:', error);
@@ -104,5 +124,6 @@ loginUser() {
  forgotPassword(){
    this.router.navigate(['/login/forgotpass']);
  }
+
 
 }

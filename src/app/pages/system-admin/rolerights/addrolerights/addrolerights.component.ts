@@ -5,8 +5,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 
-
 export interface MasterItem {
+  pagetypeid: number;
   mastername: string;
 }
 
@@ -27,32 +27,9 @@ export class AddrolerightsComponent {
   roleRightsForm!: FormGroup;
   isLoading = false;
   displayedColumns: string[] = ['mastername', 'add', 'edit', 'view', 'delete'];
-
-  // Modules configured according to your ModuleMST setup
-  moduleList: ModuleMaster[] = [
-    {
-      moduleid: 1,
-      modulename: 'System Admin',
-      masters: [{ mastername: 'Employee Master' }, { mastername: 'RoleRights Master' }
-        , { mastername: 'Commodity Master' }
-      ]//according to pageTypeid
-    },
-    {
-      moduleid: 2,
-      modulename: 'Warehouse And Insurance',
-      masters: [{ mastername: 'Warehouse Master' }, { mastername: 'Insurance Master' }]
-    },
-    {
-      moduleid: 3,
-      modulename: 'Borrower',
-      masters: [{ mastername: 'Borrower Master' }]
-    },
-    {
-      moduleid: 4,
-      modulename: 'Loan Booking',
-      masters: [{ mastername: 'Loan Booking Master'},{ mastername: 'Repayment Master' }]
-    }
-  ];
+  pagetypeid!: number;
+  moduleList: ModuleMaster[] = [];
+  
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +40,7 @@ export class AddrolerightsComponent {
 
   ngOnInit(): void {
     this.initForm();
+    this.loadModules();
   }
 
   initForm(): void {
@@ -74,12 +52,13 @@ export class AddrolerightsComponent {
       modules: this.fb.array([])
     });
 
-    this.populateModules();
   }
 
   get modules(): FormArray {
     return this.roleRightsForm.get('modules') as FormArray;
   }
+
+  
 
   populateModules(): void {
     this.moduleList.forEach(mod => {
@@ -94,6 +73,7 @@ export class AddrolerightsComponent {
       mod.masters.forEach(m => {
         mastersArray.push(
           this.fb.group({
+            pagetypeid: [m.pagetypeid],
             mastername: [m.mastername],
             addopn: [false],
             editopn: [false],
@@ -146,6 +126,7 @@ export class AddrolerightsComponent {
         userRightsMSTPayload.push({
           moduleid: mod.moduleid,
           mastername: m.mastername,
+          pagetypeid: m.pagetypeid,
           addopn: m.addopn ? 1 : 0,
           editopn: m.editopn ? 1 : 0,
           viewopn: m.viewopn ? 1 : 0,
@@ -177,22 +158,42 @@ export class AddrolerightsComponent {
   });
 }
 
-  onReset(): void {
-    this.roleRightsForm.reset({
-      rolecode: '',
-      rolename: '',
-      status: 'Active',
-      remarks: ''
-    });
+onReset(): void {
+  this.roleRightsForm.reset({
+    rolecode: '',
+    rolename: '',
+    status: 'Active',
+    remarks: ''
+  });
 
-    this.modules.controls.forEach((modGroup, index) => {
-      modGroup.patchValue({ isSelected: false });
-      this.onModuleToggle(index);
-    });
-  }
+  this.modules.controls.forEach((modGroup, index) => {
+    modGroup.patchValue({ isSelected: false });
+    this.onModuleToggle(index);
+  });
+}
 
-  onCancel(): void {
-    this.dialogRef?.close(false);
-  }
+onCancel(): void {
+  this.dialogRef?.close(false);
+}
+
+loadModules() {
+  this.isLoading = true;
+
+  this.masterService.getModulesWithMasters().subscribe({
+    next:(response: any) => {
+
+      this.moduleList = response.modules;
+      console.log('Modules with Masters: ', this.moduleList);
+      this.populateModules();
+      this.isLoading = false;
+    },
+    error: (error) => {
+      this.isLoading = false;
+      const message = error.error?.message || 'Failed to load modules and masters';
+      this.toastr.error(message, 'Error');
+    }
+  });
+}
+
 
 }
